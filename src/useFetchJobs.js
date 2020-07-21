@@ -1,10 +1,14 @@
 import { useReducer, useEffect } from 'react';
+import axios from 'axios';
 
 const ACTIONS = {
   MAKE_REQUEST: 'MAKE_REQUEST',
   GET_DATA: 'GET_DATA',
   ERROR: 'ERROR'
 }
+
+
+const BASE_URL = 'https://cors-anywhere.herokuapp.com/https://jobs.github.com/positions.json';
 
 function reducer(state, action) {
   //action.payload.x
@@ -24,13 +28,25 @@ export default function useFetchJobs(params, page) {
   const [state, dispatch] = useReducer(reducer, { jobs: [], loading: true })
 
   useEffect(() => {
-    dispatch({ type: ACTIONS.MAKE_REQUEST });
-  }, [params, page])
+    const cancelToken = axios.CancelToken.source();
 
-  return {
-    jobs: ["woot", "doot", "shaboot"],
-    loading: true,
-    error: false
-  }
+    dispatch({ type: ACTIONS.MAKE_REQUEST });
+    console.log("Sending request.");
+    axios.get(BASE_URL, {
+      cancelToken: cancelToken.token,
+      params: { markdown: true, page: page, ...params }
+    }).then( res => {
+      dispatch({ type: ACTIONS.GET_DATA, payload: { jobs: res.data }}) 
+    }).catch( e => {
+      if (axios.isCancel(e)) return;
+      dispatch({type: ACTIONS.ERROR, payload: { error: e }})
+    })
+
+    return () => { // Cleanup function
+      cancelToken.cancel();
+    }
+  }, [params, page]);
+
+  return state;
 
 }
