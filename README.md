@@ -1,4 +1,10 @@
+# GitHub Job Search API
+
 This project was based off of [Kyle's video](https://www.youtube.com/watch?v=fxY1q4SCB64) on Traversy Media's YouTube channel.
+His original repository is [here](https://github.com/WebDevSimplified/GitHub-Jobs-API-React-App).
+
+To avoid CORS issues, you can use the NPM local-cors-proxy package.
+See the examples in useFetchJobs.js for more information.
 
 ## Available Scripts
 
