@@ -12,13 +12,13 @@ function App() {
   return (
     <Container className="my-4">
       <h1>GitHub Jobs</h1>
-      <JobsPagination page={page} setPage={setPage} hasNextPage={true} />
+      <JobsPagination page={page} setPage={setPage} hasNextPage={hasNextPage} />
       {loading && <h1>Loading...</h1>}
       {error && <h1>Error. Try Refreshing.</h1>}
       {jobs.map(job => {
         return <Job key={job.id} job={job} />
       })}
-      <JobsPagination page={page} setPage={setPage} hasNextPage={false} />
+      <JobsPagination page={page} setPage={setPage} hasNextPage={hasNextPage} />
     </Container>
   );
 }
